@@ -6,6 +6,7 @@ package parser;
 	import symbols.Identifier;
 	import symbols.SymbolTable;
 	import expressions.*;
+	import ast.*;
 	
 
 import org.antlr.v4.runtime.tree.ParseTreeListener;
@@ -65,6 +66,46 @@ public interface TypeExpressionListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCmd(TypeExpressionParser.CmdContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TypeExpressionParser#cmdIf}.
+	 * @param ctx the parse tree
+	 */
+	void enterCmdIf(TypeExpressionParser.CmdIfContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TypeExpressionParser#cmdIf}.
+	 * @param ctx the parse tree
+	 */
+	void exitCmdIf(TypeExpressionParser.CmdIfContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TypeExpressionParser#cmdRead}.
+	 * @param ctx the parse tree
+	 */
+	void enterCmdRead(TypeExpressionParser.CmdReadContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TypeExpressionParser#cmdRead}.
+	 * @param ctx the parse tree
+	 */
+	void exitCmdRead(TypeExpressionParser.CmdReadContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TypeExpressionParser#cmdWrite}.
+	 * @param ctx the parse tree
+	 */
+	void enterCmdWrite(TypeExpressionParser.CmdWriteContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TypeExpressionParser#cmdWrite}.
+	 * @param ctx the parse tree
+	 */
+	void exitCmdWrite(TypeExpressionParser.CmdWriteContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TypeExpressionParser#cmdAttr}.
+	 * @param ctx the parse tree
+	 */
+	void enterCmdAttr(TypeExpressionParser.CmdAttrContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TypeExpressionParser#cmdAttr}.
+	 * @param ctx the parse tree
+	 */
+	void exitCmdAttr(TypeExpressionParser.CmdAttrContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link TypeExpressionParser#expr}.
 	 * @param ctx the parse tree

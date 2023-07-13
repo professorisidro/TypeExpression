@@ -2,6 +2,12 @@ programa
 	INTEGER a,b,c,d.
 	REAL e.	
 	
+	escreva("Hello World!").
+	escreva("Digite o valor C").
+	leia(c).
+	
 	a := 2.
-	b := 3 + 2 - 1 + 5 - 3 + c.
+	b := 3 + 2 - 1 + 5 - 3 + a.
+	escreva(a).
+	escreva(b).
 fimprog.

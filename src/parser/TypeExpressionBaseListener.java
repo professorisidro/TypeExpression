@@ -6,6 +6,7 @@ package parser;
 	import symbols.Identifier;
 	import symbols.SymbolTable;
 	import expressions.*;
+	import ast.*;
 	
 
 
@@ -80,6 +81,54 @@ public class TypeExpressionBaseListener implements TypeExpressionListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCmd(TypeExpressionParser.CmdContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCmdIf(TypeExpressionParser.CmdIfContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCmdIf(TypeExpressionParser.CmdIfContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCmdRead(TypeExpressionParser.CmdReadContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCmdRead(TypeExpressionParser.CmdReadContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCmdWrite(TypeExpressionParser.CmdWriteContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCmdWrite(TypeExpressionParser.CmdWriteContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCmdAttr(TypeExpressionParser.CmdAttrContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCmdAttr(TypeExpressionParser.CmdAttrContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

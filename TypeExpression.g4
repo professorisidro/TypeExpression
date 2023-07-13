@@ -6,6 +6,7 @@ grammar TypeExpression;
 	import symbols.Identifier;
 	import symbols.SymbolTable;
 	import expressions.*;
+	import ast.*;
 	
 }
 
@@ -17,10 +18,24 @@ grammar TypeExpression;
 	private DataType leftDT;
 	private DataType rightDT;
 	private String   idAtribuido;
+	private String   text;
+	private Program  program = new Program();
 	
-//	public void exibirID(){
-//		listaID.stream().forEach((id)->System.out.println(id));
-//	}
+	public void init(){
+		program.setSymbolTable(symbolTable);
+	}
+		
+	public void exibirID(){
+		symbolTable.getSymbols().values().stream().forEach((id)->System.out.println(id));
+	}
+	
+	public void generateObjectCode(){
+		program.generateTarget();
+	}
+	
+	public void runInterpreter(){
+		program.run();
+	}
 }
 programa  : 'programa' decl+ cmd+ 'fimprog.'
 		  ;
@@ -38,7 +53,42 @@ lista_var : ID { symbolTable.add(_input.LT(-1).getText(), new Identifier(_input.
            )*
    		  ;
    		  
-cmd		  : ID {
+cmd		  : cmdAttr | cmdRead | cmdWrite | cmdIf
+		  ;
+		  
+cmdIf     : 'se' AP expr OPREL expr FP 'entao' cmd+ ('senao' cmd+)? 'fimse' PF		 
+		  ; 
+		  
+cmdRead   : 'leia' AP ID {
+				Identifier id = symbolTable.get(_input.LT(-1).getText());
+				if (id == null){
+					throw new RuntimeException("Undeclared Variable");
+				}
+				CmdRead _read = new CmdRead(id);
+				program.getComandos().add(_read);
+			 }
+			 FP PF
+		  ;		 
+		  
+cmdWrite  : 'escreva' AP (
+	         ID {
+	         	Identifier id = symbolTable.get(_input.LT(-1).getText());
+	         	if (id == null){
+	         		throw new RuntimeException("Undeclared Variable");	         		
+	         	}
+	         	CmdWrite _write = new CmdWrite(id);
+	         	program.getComandos().add(_write);
+	         } 
+	         | 
+	         TEXT {
+	         	CmdWrite _write = new CmdWrite(_input.LT(-1).getText());
+	         	program.getComandos().add(_write);
+	         	
+	         }
+             ) FP PF
+          ;		      		  
+   		  
+cmdAttr   : ID {
 				idAtribuido = _input.LT(-1).getText();
 				if (!symbolTable.exists(_input.LT(-1).getText())){
 					throw new RuntimeException("Semantic ERROR - Undeclared Identifier");
@@ -53,9 +103,11 @@ cmd		  : ID {
 					id.setValue(expression.eval());
 					symbolTable.add(idAtribuido, id);
 					
-					System.out.println("EVAL ("+expression+") = "+expression.eval());
-					expression = null;
+					//System.out.println("EVAL ("+expression+") = "+expression.eval());
 					
+					CmdAttrib _attr = new CmdAttrib(id, expression);
+					program.getComandos().add(_attr);
+					expression = null;					
 				}
 		  ;   		  
 		  
@@ -102,6 +154,9 @@ exprl     : (SUM | SUB) {
 NUMBER	  : [0-9]+
 		  ;
 		  
+TEXT 	  : '"' ([a-z]|[A-Z]|[0-9]|' '|'\t'|'!'|'-')* '"'
+		  ;		  
+		  
 ATTR	  : ':='
    		  ;		
    		  
@@ -110,6 +165,9 @@ SUM	      : '+'
 		  
 SUB		  : '-'		     		    
           ;
+          
+OPREL     : '>' | '>=' | '<' | '<=' | '==' | '<>'
+ 		  ;          
    		  
 ID		  : [a-z] ([a-z]|[A-Z]|[0-9])*
           ;
@@ -119,6 +177,11 @@ VIRG      : ','
           
 PF        : '.'
           ;
-
+          
+AP	      : '('          
+	      ;
+	      
+FP 		  : ')'
+          ;	      
 BLANK     : (' '| '\t' | '\n' | '\r') -> skip
           ;                                 		           		 		 

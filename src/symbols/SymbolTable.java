@@ -22,4 +22,13 @@ public class SymbolTable {
 		return this.symbols.containsKey(key);
 	}
 
+	public HashMap<String, Identifier> getSymbols() {
+		return symbols;
+	}
+
+	public void setSymbols(HashMap<String, Identifier> symbols) {
+		this.symbols = symbols;
+	}
+	
+
 }
