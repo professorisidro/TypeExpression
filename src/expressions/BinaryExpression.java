@@ -11,7 +11,7 @@ public class BinaryExpression extends AbstractExpression{
 		case '+':
 			return leftSide.eval() + rightSide.eval();
 		case '-':
-			return leftSide.eval() - rightSide.eval();
+			return leftSide.eval() - rightSide.eval();			
 		default:
 			return 0;
 		}

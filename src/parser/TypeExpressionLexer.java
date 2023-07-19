@@ -2,7 +2,9 @@
 package parser;
 
 	import java.util.ArrayList;
+	import java.util.List;
 	import symbols.DataType;
+	import java.util.Stack;
 	import symbols.Identifier;
 	import symbols.SymbolTable;
 	import expressions.*;
@@ -105,9 +107,11 @@ public class TypeExpressionLexer extends Lexer {
 		private String   idAtribuido;
 		private String   text;
 		private Program  program = new Program();
+		private Stack<List<AbstractCommand>> stack = new Stack<List<AbstractCommand>>();
 		
 		public void init(){
 			program.setSymbolTable(symbolTable);
+			stack.push(new ArrayList<AbstractCommand>());
 		}
 			
 		public void exibirID(){

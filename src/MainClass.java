@@ -18,7 +18,7 @@ public class MainClass {
 			parser.exibirID();
 			System.out.println("------- TARGET --------------");
 			parser.generateObjectCode();
-			parser.runInterpreter();
+			//parser.runInterpreter();
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();

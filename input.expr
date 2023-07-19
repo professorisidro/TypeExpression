@@ -10,4 +10,16 @@ programa
 	b := 3 + 2 - 1 + 5 - 3 + a.
 	escreva(a).
 	escreva(b).
+	se (a > b) entao
+		escreva(b).
+		escreva("Hello World").
+	senao
+		se (a < b) entao
+			escreva(a).
+			escreva("goodbye world").
+		senao
+			escreva("nao sei").
+		fimse.
+	fimse.		
+		
 fimprog.

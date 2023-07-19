@@ -2,7 +2,9 @@ grammar TypeExpression;
 
 @header{
 	import java.util.ArrayList;
+	import java.util.List;
 	import symbols.DataType;
+	import java.util.Stack;
 	import symbols.Identifier;
 	import symbols.SymbolTable;
 	import expressions.*;
@@ -20,9 +22,11 @@ grammar TypeExpression;
 	private String   idAtribuido;
 	private String   text;
 	private Program  program = new Program();
+	private Stack<List<AbstractCommand>> stack = new Stack<List<AbstractCommand>>();
 	
 	public void init(){
 		program.setSymbolTable(symbolTable);
+		stack.push(new ArrayList<AbstractCommand>());
 	}
 		
 	public void exibirID(){
@@ -38,6 +42,9 @@ grammar TypeExpression;
 	}
 }
 programa  : 'programa' decl+ cmd+ 'fimprog.'
+			{
+				program.setComandos(stack.pop());
+			}
 		  ;
 		  
 decl	  : tipo lista_var PF
@@ -56,7 +63,35 @@ lista_var : ID { symbolTable.add(_input.LT(-1).getText(), new Identifier(_input.
 cmd		  : cmdAttr | cmdRead | cmdWrite | cmdIf
 		  ;
 		  
-cmdIf     : 'se' AP expr OPREL expr FP 'entao' cmd+ ('senao' cmd+)? 'fimse' PF		 
+cmdIf     : 'se' {
+				stack.push(new ArrayList<AbstractCommand>());
+				BinaryExpression _relExpr = new BinaryExpression();				
+				CmdIf _cmdIf = new CmdIf();
+			} 
+			AP expr {
+				_relExpr.setLeftSide(expression);
+			}
+			OPREL {
+				_relExpr.setOperator(_input.LT(-1).getText().charAt(0));
+			} 
+			expr {
+				_relExpr.setRightSide(expression);
+				_cmdIf.setExpr(_relExpr);
+				
+			} FP 'entao'  cmd+  
+			{
+				_cmdIf.setListaTrue(stack.pop());
+					
+			}
+			('senao' {
+				stack.push(new ArrayList<AbstractCommand>());
+			}
+			cmd+)? 
+			
+			'fimse' PF {
+				_cmdIf.setListaFalse(stack.pop());
+				stack.peek().add(_cmdIf);
+			}		 
 		  ; 
 		  
 cmdRead   : 'leia' AP ID {
@@ -65,7 +100,7 @@ cmdRead   : 'leia' AP ID {
 					throw new RuntimeException("Undeclared Variable");
 				}
 				CmdRead _read = new CmdRead(id);
-				program.getComandos().add(_read);
+				stack.peek().add(_read);
 			 }
 			 FP PF
 		  ;		 
@@ -77,12 +112,12 @@ cmdWrite  : 'escreva' AP (
 	         		throw new RuntimeException("Undeclared Variable");	         		
 	         	}
 	         	CmdWrite _write = new CmdWrite(id);
-	         	program.getComandos().add(_write);
+	         	stack.peek().add(_write);
 	         } 
 	         | 
 	         TEXT {
 	         	CmdWrite _write = new CmdWrite(_input.LT(-1).getText());
-	         	program.getComandos().add(_write);
+	         	stack.peek().add(_write);
 	         	
 	         }
              ) FP PF
@@ -106,7 +141,7 @@ cmdAttr   : ID {
 					//System.out.println("EVAL ("+expression+") = "+expression.eval());
 					
 					CmdAttrib _attr = new CmdAttrib(id, expression);
-					program.getComandos().add(_attr);
+					stack.peek().add(_attr);
 					expression = null;					
 				}
 		  ;   		  

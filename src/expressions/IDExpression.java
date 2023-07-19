@@ -8,6 +8,7 @@ public class IDExpression extends AbstractExpression{
 		return this.value;
 	}
 	
-	
-
+	public String toString() {
+		return this.id;
+	}
 }
